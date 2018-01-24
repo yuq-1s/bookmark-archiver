@@ -205,10 +205,18 @@ def str_between(string, start, end=None):
 
     return content
 
+def is_pdf(link):
+    if link['base_url'].endswith('.pdf'):
+        return True
+    pdf_pattern = ['openreview\.net\/pdf\?id=\w+']
+    for pattern in pdf_pattern:
+        if re.search(pattern, link['url']):
+            return True
+    return False
+
 def get_link_type(link):
     """Certain types of links need to be handled specially, this figures out when that's the case"""
-
-    if link['base_url'].endswith('.pdf'):
+    if is_pdf(link):
         return 'PDF'
     elif link['base_url'].rsplit('.', 1) in ('pdf', 'png', 'jpg', 'jpeg', 'svg', 'bmp', 'gif', 'tiff', 'webp'):
         return 'image'
